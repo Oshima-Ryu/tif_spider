@@ -8,17 +8,22 @@ from bs4 import BeautifulSoup
 
 def one_level_spider(url):
     response = requests.get(url)
-    html = response.text
-    soup = BeautifulSoup(html, features="lxml")
+    # html = response.text
+    # soup = BeautifulSoup(html, features="lxml")
+    html = response.content
+    soup = BeautifulSoup(html)
     url_list = soup.find_all("a")
     for url_temp in url_list:
+        print(url_temp.text.split(" ")[0])
+        if url_temp.text.split(" ")[0] == "ftp":
+            continue
         href = url_temp.get("href")
         # print(href.split(".")[-1])
         extension_str = href.split(".")[-1]
-        if extension_str == "tif" or extension_str == "gz" or extension_str == "tar" or extension_str == "docx" or extension_str == "doc" or extension_str == "pdf":
+        if extension_str == "tif" or extension_str == "gz" or extension_str == "rar" or extension_str == "tar" or extension_str == "docx" or extension_str == "doc" or extension_str == "pdf":
             path_arr = href.split("/")
             path_str = "/".join(path_arr[3:-1]) + "/"
-            print(path_str)
+            # print(path_str)
             if not os.path.exists(path_str):
                 os.makedirs(path_str)
             file_name = "/".join(path_arr[3:])
@@ -63,10 +68,10 @@ if __name__ == "__main__":
     # url = "http://data.ess.tsinghua.edu.cn/landsat_pathList_fromglc_0_1.html"
 
     # 该url若包含二级目录two_level_directory=True，若是一级目录two_level_directory=False
-    url_dict = {
-        "url": "http://data.ess.tsinghua.edu.cn/fromglc2015_v1.html",
-        "two_level_directory": False
-    }
+    # url_dict = {
+    #     "url": "http://data.ess.tsinghua.edu.cn/fromglc2017v1.html",
+    #     "two_level_directory": False
+    # }
 
     url_dict = {
         "url": "http://data.ess.tsinghua.edu.cn/landsat_pathList_fromglc_0_1.html",
