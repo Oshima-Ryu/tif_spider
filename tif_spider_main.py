@@ -41,12 +41,16 @@ def one_level_spider(url):
             #         f.write(tif_response.content)
             #         f.close()
 
-def two_level_spider(url):
+def two_level_spider(url, start_index=0):
     response = requests.get(url)
     html = response.text
     soup = BeautifulSoup(html, features="lxml")
     url_list = soup.find_all("a")
+    index = 0
     for url_temp in url_list:
+        index += 1
+        if index <= start_index:
+            continue
         # print(url_temp.text)
         if url_temp.text.strip() == "view table":
             # print(url_temp)
@@ -58,7 +62,7 @@ def two_level_spider(url):
 def start(url_dict):
     # 包含二级目录two_level_directory=True，是一级目录two_level_directory=False
     if url_dict.get("two_level_directory"):
-        two_level_spider(url_dict.get("url"))
+        two_level_spider(url_dict.get("url"), url_dict.get("start_index"))
     else:
         one_level_spider(url_dict.get("url"))
 
@@ -75,7 +79,8 @@ if __name__ == "__main__":
 
     url_dict = {
         "url": "http://data.ess.tsinghua.edu.cn/landsat_pathList_fromglc_0_1.html",
-        "two_level_directory": True
+        "two_level_directory": True,
+        "start_index": 0,
     }
     start(url_dict)
 
