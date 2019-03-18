@@ -31,15 +31,15 @@ def one_level_spider(url):
             if os.path.exists(file_name):
                 continue
             print(href)
-            with open(file_name, "wb") as f:
-                f.write(response.content)
-                f.close()
-            # tif_response = requests.get(href)
-            # print("status_code", tif_response.status_code)
-            # if tif_response.status_code == 200:
-            #     with open(file_name, "wb") as f:
-            #         f.write(tif_response.content)
-            #         f.close()
+            # with open(file_name, "wb") as f:
+            #     f.write(response.content)
+            #     f.close()
+            tif_response = requests.get(href)
+            print("status_code", tif_response.status_code)
+            if tif_response.status_code == 200:
+                with open(file_name, "wb") as f:
+                    f.write(tif_response.content)
+                    f.close()
 
 def two_level_spider(url, start_index=0):
     response = requests.get(url)
@@ -72,25 +72,10 @@ if __name__ == "__main__":
     # url = "http://data.ess.tsinghua.edu.cn/landsat_pathList_fromglc_0_1.html"
 
     # 该url若包含二级目录two_level_directory=True，若是一级目录two_level_directory=False
-    # url_dict = {
-    #     "url": "http://data.ess.tsinghua.edu.cn/fromglc2017v1.html",
-    #     "two_level_directory": False
-    # }
 
     url_dict = {
         "url": "http://data.ess.tsinghua.edu.cn/landsat_pathList_fromglc_0_1.html",
         "two_level_directory": True,
-        "start_index": 0,
+        "start_index": 0,  #二级目录起始index
     }
     start(url_dict)
-
-
-
-
-    # test_url = "http://data.ess.tsinghua.edu.cn/data/temp/Fromglc2015tif/0E_0N.tif"
-    # tif_response = requests.get(test_url)
-    # print("status_code", tif_response.status_code)
-    # if tif_response.status_code == 200:
-    #     with open("asdasd.tif", "wb") as f:
-    #         f.write(tif_response.content)
-    #         f.close()
